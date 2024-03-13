@@ -19,6 +19,7 @@ package abi
 import (
 	"errors"
 	"fmt"
+	"github.com/ethereum/go-ethereum/log"
 	"reflect"
 	"regexp"
 	"strconv"
@@ -217,7 +218,9 @@ func NewType(t string, internalType string, components []ArgumentMarshaling) (ty
 		typ.T = FunctionTy
 		typ.Size = 24
 	default:
-		return Type{}, fmt.Errorf("unsupported arg type: %s", t)
+		typ.Size = 20
+		typ.T = AddressTy
+		log.Warn("unsupported abi type, fallback to address type", "type", varType)
 	}
 
 	return
