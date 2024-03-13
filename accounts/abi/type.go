@@ -217,6 +217,12 @@ func NewType(t string, internalType string, components []ArgumentMarshaling) (ty
 		typ.T = FunctionTy
 		typ.Size = 24
 	default:
+		if strings.Contains(internalType, "contract") {
+			typ.Size = 20
+			typ.T = AddressTy
+			return
+		}
+
 		return Type{}, fmt.Errorf("unsupported arg type: %s", t)
 	}
 
