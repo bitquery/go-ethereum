@@ -217,7 +217,7 @@ func NewType(t string, internalType string, components []ArgumentMarshaling) (ty
 		typ.T = FunctionTy
 		typ.Size = 24
 	default:
-		if strings.Contains(internalType, "contract") {
+		if isInterfaceType(internalType) || isInterfaceType(t) {
 			typ.Size = 20
 			typ.T = AddressTy
 			return
@@ -227,6 +227,10 @@ func NewType(t string, internalType string, components []ArgumentMarshaling) (ty
 	}
 
 	return
+}
+
+func isInterfaceType(t string) bool {
+	return strings.HasPrefix(t, "contract") || strings.HasSuffix(t, "contract") || strings.HasPrefix(t, "storage") || strings.HasSuffix(t, "storage")
 }
 
 // GetType returns the reflection type of the ABI type.
